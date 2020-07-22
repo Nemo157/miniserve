@@ -21,8 +21,8 @@ const ROUTE_ALPHABET: [char; 16] = [
 )]
 struct CLIArgs {
     /// Be verbose, includes emitting access logs
-    #[structopt(short = "v", long = "verbose")]
-    verbose: bool,
+    #[structopt(short = "v", long = "verbose", parse(from_occurrences))]
+    verbose: u8,
 
     /// Which path to serve
     #[structopt(name = "PATH", parse(from_os_str))]

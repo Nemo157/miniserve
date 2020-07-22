@@ -26,8 +26,8 @@ use crate::errors::ContextualError;
 #[derive(Clone)]
 /// Configuration of the Miniserve application
 pub struct MiniserveConfig {
-    /// Enable verbose mode
-    pub verbose: bool,
+    /// Verbosity level
+    pub verbose: u8,
 
     /// Path to be served by miniserve
     pub path: std::path::PathBuf,
@@ -90,10 +90,11 @@ async fn run() -> Result<(), ContextualError> {
 
     let miniserve_config = args::parse_args();
 
-    let log_level = if miniserve_config.verbose {
-        simplelog::LevelFilter::Info
-    } else {
-        simplelog::LevelFilter::Error
+    let log_level = match miniserve_config.verbose {
+        0 => simplelog::LevelFilter::Error,
+        1 => simplelog::LevelFilter::Info,
+        2 => simplelog::LevelFilter::Debug,
+        _ => simplelog::LevelFilter::Trace,
     };
 
     if simplelog::TermLogger::init(
